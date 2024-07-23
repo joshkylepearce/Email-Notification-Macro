@@ -23,11 +23,11 @@ To ensure compatibility with the macro, the distribution list must be:
 
 Format Example:
 TO_CC_BCC	EMAIL_ADDRESS
-TO			joshkylepeare@gmail.com
-TO			user1@github.com
-TO			user2@github.com
-CC			user3@github.com
-BCC			user4@github.com
+TO		joshkylepeare@gmail.com
+TO		user1@github.com
+TO		user2@github.com
+CC		user3@github.com
+BCC		user4@github.com
 
 Code Example:
 data distribution_list;
@@ -35,11 +35,11 @@ infile datalines delimiter=",";
 format TO_CC_BCC $3. EMAIL_ADDRESS $254.;
 input TO_CC_BCC $ EMAIL_ADDRESS $;
 datalines;
-TO, joshkylepearce@gmail.com
+TO, 	joshkylepearce@gmail.com
 TO,	user1@github.com
 TO,	user2@github.com
 CC,	user3@github.com
-BCC,user4@github.com
+BCC,	user4@github.com
 run;
 ************************************************************************************/
 
@@ -105,15 +105,12 @@ Notes:
 data _null_;
 	set Distribution_List;
 	EMAIL_ADDRESS=quote(trim(EMAIL_ADDRESS),"'");
-		/*Determine which stakeholders should be emailed*/
-		if upcase(TO_CC_BCC) = "TO" then
-			call symput('to_email',catx(' ',symget('to_email'),EMAIL_ADDRESS));
-		/*Determine which staleholders should be cc'd*/
-		else if upcase(TO_CC_BCC) = 'CC' then
-			call symput('cc_email',catx(' ',symget('cc_email'),EMAIL_ADDRESS));
-		/*Determine which stakeholders should be bcc'd*/
-		else if upcase(TO_CC_BCC) = 'BCC' then 
-			call symput('bcc_email',catx(' ',symget('bcc_email'),EMAIL_ADDRESS));
+	/*Determine which stakeholders should be emailed*/
+	if upcase(TO_CC_BCC) = "TO" then call symput('to_email',catx(' ',symget('to_email'),EMAIL_ADDRESS));
+	/*Determine which staleholders should be cc'd*/
+	else if upcase(TO_CC_BCC) = 'CC' then call symput('cc_email',catx(' ',symget('cc_email'),EMAIL_ADDRESS));
+	/*Determine which stakeholders should be bcc'd*/
+	else if upcase(TO_CC_BCC) = 'BCC' then call symput('bcc_email',catx(' ',symget('bcc_email'),EMAIL_ADDRESS));
 run;
 
 /*Write the 'to', 'cc', 'bcc' & 'from' list to the SAS log*/
